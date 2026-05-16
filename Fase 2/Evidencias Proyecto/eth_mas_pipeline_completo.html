@@ -1,0 +1,601 @@
+
+<style>
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);border:0}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans)}
+.wrap{padding:12px 0 32px}
+svg{display:block;width:100%}
+
+/* phase tabs */
+.phase-tabs{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.ptab{font-size:11px;padding:4px 12px;border-radius:20px;border:1px solid var(--color-border-tertiary);cursor:pointer;color:var(--color-text-secondary);background:transparent;transition:.15s}
+.ptab:hover{background:var(--color-background-secondary)}
+.ptab.on{color:var(--color-text-primary);border-color:var(--color-border-primary);background:var(--color-background-secondary);font-weight:500}
+
+/* tooltip */
+.tip{position:fixed;z-index:999;background:var(--color-background-primary);border:1px solid var(--color-border-secondary);border-radius:8px;padding:10px 14px;font-size:12px;max-width:220px;color:var(--color-text-primary);line-height:1.5;pointer-events:none;display:none;box-shadow:0 4px 16px rgba(0,0,0,.12)}
+.tip b{font-weight:500;display:block;margin-bottom:3px}
+.tip s2{color:var(--color-text-secondary);font-size:11px}
+</style>
+
+<h2 class="sr-only">Diagrama completo del pipeline ETH-MAS: desde que el operador define el engagement hasta la generación del reporte, pasando por ReconAgent, ScanAgent, AnalysisAgent y ReporterAgent</h2>
+
+<div class="wrap">
+<div class="phase-tabs" id="tabs"></div>
+
+<svg id="diag" width="100%" viewBox="0 0 680 2380" role="img">
+<title>Pipeline completo ETH-MAS</title>
+<desc>Diagrama detallado del pipeline de ethical hacking automatizado con agentes de IA</desc>
+<defs>
+  <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arr-r" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#E24B4A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+  <marker id="arr-o" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+    <path d="M2 1L8 5L2 9" fill="none" stroke="#BA7517" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </marker>
+</defs>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FASE 0 — OPERADOR
+══════════════════════════════════════════════════════════════ -->
+<!-- label fase -->
+<rect x="20" y="20" width="88" height="22" rx="4" fill="#E6F1FB"/>
+<text x="64" y="35" text-anchor="middle" font-size="11" font-weight="500" fill="#185FA5" font-family="var(--font-sans)">FASE 0</text>
+<text x="64" y="49" text-anchor="middle" font-size="10" fill="#378ADD" font-family="var(--font-sans)">Operador</text>
+
+<!-- Operador box -->
+<g class="node" id="op" data-tip="Punto de entrada. El operador es el humano que configura y supervisa el engagement. Define todo antes de que cualquier agente ejecute.">
+  <rect x="190" y="20" width="300" height="52" rx="10" fill="#EAF3DE" stroke="#639922" stroke-width="1"/>
+  <text x="340" y="42" text-anchor="middle" font-size="13" font-weight="500" fill="#27500A" font-family="var(--font-sans)">Operador define el engagement</text>
+  <text x="340" y="58" text-anchor="middle" font-size="11" fill="#3B6D11" font-family="var(--font-sans)">Dashboard web · API REST</text>
+</g>
+
+<!-- campos que define -->
+<g id="op-fields">
+  <!-- nombre -->
+  <rect x="80" y="96" width="118" height="38" rx="6" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+  <text x="139" y="112" text-anchor="middle" font-size="10" font-weight="500" fill="#444441" font-family="var(--font-sans)">Nombre</text>
+  <text x="139" y="126" text-anchor="middle" font-size="10" fill="#888780" font-family="var(--font-sans)">Lab-01, Client-X…</text>
+  <!-- scope -->
+  <rect x="210" y="96" width="140" height="38" rx="6" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+  <text x="280" y="112" text-anchor="middle" font-size="10" font-weight="500" fill="#444441" font-family="var(--font-sans)">Scope autorizado</text>
+  <text x="280" y="126" text-anchor="middle" font-size="10" fill="#888780" font-family="var(--font-sans)">IPs, CIDRs, dominios</text>
+  <!-- tacticas -->
+  <rect x="362" y="96" width="140" height="38" rx="6" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+  <text x="432" y="112" text-anchor="middle" font-size="10" font-weight="500" fill="#444441" font-family="var(--font-sans)">Tácticas ATT&CK</text>
+  <text x="432" y="126" text-anchor="middle" font-size="10" fill="#888780" font-family="var(--font-sans)">TA0043, TA0007…</text>
+  <!-- ROE -->
+  <rect x="514" y="96" width="110" height="38" rx="6" fill="#F1EFE8" stroke="#B4B2A9" stroke-width="0.5"/>
+  <text x="569" y="112" text-anchor="middle" font-size="10" font-weight="500" fill="#444441" font-family="var(--font-sans)">Rules of Engagement</text>
+  <text x="569" y="126" text-anchor="middle" font-size="10" fill="#888780" font-family="var(--font-sans)">restricciones, ROE</text>
+</g>
+
+<!-- connector op → fields -->
+<line x1="340" y1="72" x2="340" y2="96" stroke="var(--color-border-secondary)" stroke-width="0.5" stroke-dasharray="3 3"/>
+
+<!-- persistencia en PG -->
+<rect x="240" y="152" width="200" height="34" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.5"/>
+<text x="340" y="168" text-anchor="middle" font-size="11" font-weight="500" fill="#0C447C" font-family="var(--font-sans)">PostgreSQL</text>
+<text x="340" y="181" text-anchor="middle" font-size="10" fill="#185FA5" font-family="var(--font-sans)">tabla engagements · scope_targets</text>
+
+<line x1="340" y1="134" x2="340" y2="152" stroke="#639922" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- connector a MissionController -->
+<line x1="340" y1="186" x2="340" y2="210" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FASE 1 — MISSIONCONTROLLER
+══════════════════════════════════════════════════════════════ -->
+<rect x="20" y="210" width="88" height="22" rx="4" fill="#EEEDFE"/>
+<text x="64" y="225" text-anchor="middle" font-size="11" font-weight="500" fill="#3C3489" font-family="var(--font-sans)">FASE 1</text>
+<text x="64" y="239" text-anchor="middle" font-size="10" fill="#534AB7" font-family="var(--font-sans)">Orquestador</text>
+
+<g class="node" id="mc" data-tip="El MissionController es el cerebro central. Coordina a todos los agentes, gestiona el scope, controla el HITL y decide si el pipeline continúa o se aborta.">
+  <rect x="160" y="210" width="360" height="58" rx="10" fill="#EEEDFE" stroke="#534AB7" stroke-width="1.5"/>
+  <text x="340" y="232" text-anchor="middle" font-size="14" font-weight="500" fill="#26215C" font-family="var(--font-sans)">MissionController</text>
+  <text x="340" y="250" text-anchor="middle" font-size="11" fill="#3C3489" font-family="var(--font-sans)">AgentLoop · scope enforcement · decisiones</text>
+  <text x="340" y="263" text-anchor="middle" font-size="10" fill="#534AB7" font-family="var(--font-sans)">asyncio · FastAPI · Claude API</text>
+</g>
+
+<!-- scope check box -->
+<g class="node" id="sc" data-tip="Antes de que cualquier agente llame a una herramienta, se valida el target contra el scope. Si está fuera, se lanza ScopeViolationError y se loguea en MongoDB. Esto ocurre en código Python, NO en el prompt del LLM.">
+  <rect x="480" y="222" width="148" height="34" rx="6" fill="#FCEBEB" stroke="#E24B4A" stroke-width="0.5"/>
+  <text x="554" y="236" text-anchor="middle" font-size="10" font-weight="500" fill="#501313" font-family="var(--font-sans)">@enforce_scope</text>
+  <text x="554" y="249" text-anchor="middle" font-size="10" fill="#A32D2D" font-family="var(--font-sans)">decorador en cada tool</text>
+</g>
+<line x1="520" y1="239" x2="480" y2="239" stroke="#E24B4A" stroke-width="0.5" stroke-dasharray="3 2"/>
+
+<!-- connector a HITL check -->
+<line x1="340" y1="268" x2="340" y2="294" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- HITL gate -->
+<g class="node" id="hitl" data-tip="Human-in-the-Loop gate. Para acciones con risk_level >= MEDIUM el agente llama a request_hitl_approval(), persiste un registro en PostgreSQL con status=PENDING y suspende ejecución mediante asyncio.Event. El operador aprueba/rechaza desde el dashboard.">
+  <rect x="200" y="294" width="280" height="44" rx="8" fill="#FAEEDA" stroke="#BA7517" stroke-width="1"/>
+  <text x="340" y="314" text-anchor="middle" font-size="12" font-weight="500" fill="#412402" font-family="var(--font-sans)">HITL Gate — ¿aprobación requerida?</text>
+  <text x="340" y="330" text-anchor="middle" font-size="10" fill="#854F0B" font-family="var(--font-sans)">hitl_actions (PostgreSQL) · asyncio.Event</text>
+</g>
+
+<!-- HITL → bloqueado -->
+<line x1="200" y1="316" x2="100" y2="316" stroke="#E24B4A" stroke-width="1" stroke-dasharray="4 3" marker-end="url(#arr-r)"/>
+<rect x="20" y="304" width="72" height="24" rx="5" fill="#FCEBEB" stroke="#E24B4A" stroke-width="0.5"/>
+<text x="56" y="320" text-anchor="middle" font-size="10" font-weight="500" fill="#A32D2D" font-family="var(--font-sans)">Bloqueado</text>
+
+<!-- HITL → aprobado -->
+<line x1="480" y1="316" x2="590" y2="316" stroke="#639922" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="590" y="304" width="72" height="24" rx="5" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text x="626" y="320" text-anchor="middle" font-size="10" font-weight="500" fill="#27500A" font-family="var(--font-sans)">Aprobado</text>
+
+<!-- connector HITL → ReconAgent -->
+<line x1="340" y1="338" x2="340" y2="364" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FASE 2 — RECONAGENT
+══════════════════════════════════════════════════════════════ -->
+<rect x="20" y="364" width="88" height="22" rx="4" fill="#E6F1FB"/>
+<text x="64" y="379" text-anchor="middle" font-size="11" font-weight="500" fill="#185FA5" font-family="var(--font-sans)">FASE 2</text>
+<text x="64" y="393" text-anchor="middle" font-size="10" fill="#378ADD" font-family="var(--font-sans)">ReconAgent</text>
+
+<g class="node" id="recon" data-tip="Agente de reconocimiento pasivo. Usa LLM para razonar qué herramienta invocar a continuación. Sus tools llegan via MCP. Almacena cada finding en MongoDB con su técnica ATT&CK.">
+  <rect x="160" y="364" width="360" height="54" rx="10" fill="#E6F1FB" stroke="#185FA5" stroke-width="1.5"/>
+  <text x="340" y="386" text-anchor="middle" font-size="14" font-weight="500" fill="#042C53" font-family="var(--font-sans)">ReconAgent</text>
+  <text x="340" y="402" text-anchor="middle" font-size="11" fill="#185FA5" font-family="var(--font-sans)">AgentLoop · LLM reasoning · MCP tools</text>
+  <text x="340" y="414" text-anchor="middle" font-size="10" fill="#378ADD" font-family="var(--font-sans)">TA0043 Reconnaissance · T1590 · T1592 · T1596</text>
+</g>
+
+<!-- tools recon — 4 en fila -->
+<!-- tool 1: DNS -->
+<g class="node" id="t-dns" data-tip="dns_enum(): ejecuta dig para registros A, MX, NS, TXT. Descubre subdominios activos. Timeout 30s. MCP server retorna lista estructurada. Técnica: T1590.002">
+  <rect x="68" y="438" width="118" height="50" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.5"/>
+  <text x="127" y="455" text-anchor="middle" font-size="11" font-weight="500" fill="#0C447C" font-family="var(--font-sans)">dns_enum()</text>
+  <text x="127" y="469" text-anchor="middle" font-size="9.5" fill="#378ADD" font-family="var(--font-sans)">dig · A, MX, NS, TXT</text>
+  <text x="127" y="481" text-anchor="middle" font-size="9" fill="#185FA5" font-family="var(--font-sans)">T1590.002</text>
+</g>
+<!-- tool 2: Whois -->
+<g class="node" id="t-whois" data-tip="whois_lookup(): usa python-whois. Extrae registrar, creation_date, name_servers, emails del registrante. Técnica: T1596">
+  <rect x="200" y="438" width="118" height="50" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.5"/>
+  <text x="259" y="455" text-anchor="middle" font-size="11" font-weight="500" fill="#0C447C" font-family="var(--font-sans)">whois_lookup()</text>
+  <text x="259" y="469" text-anchor="middle" font-size="9.5" fill="#378ADD" font-family="var(--font-sans)">python-whois</text>
+  <text x="259" y="481" text-anchor="middle" font-size="9" fill="#185FA5" font-family="var(--font-sans)">T1596</text>
+</g>
+<!-- tool 3: theHarvester -->
+<g class="node" id="t-harv" data-tip="theharvester_run(): ejecuta theHarvester via subprocess. Busca en Google, Bing, certificados SSL. Extrae emails, hosts, IPs. Timeout 60s. Técnica: T1596.005">
+  <rect x="332" y="438" width="118" height="50" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.5"/>
+  <text x="391" y="455" text-anchor="middle" font-size="11" font-weight="500" fill="#0C447C" font-family="var(--font-sans)">theHarvester</text>
+  <text x="391" y="469" text-anchor="middle" font-size="9.5" fill="#378ADD" font-family="var(--font-sans)">emails, hosts, IPs</text>
+  <text x="391" y="481" text-anchor="middle" font-size="9" fill="#185FA5" font-family="var(--font-sans)">T1596.005</text>
+</g>
+<!-- tool 4: Shodan -->
+<g class="node" id="t-shodan" data-tip="shodan_search(): consulta la API de Shodan. Retorna servicios expuestos, banners, puertos, geolocalización. Rate-limited. Técnica: T1596.005">
+  <rect x="464" y="438" width="118" height="50" rx="6" fill="#E6F1FB" stroke="#378ADD" stroke-width="0.5"/>
+  <text x="523" y="455" text-anchor="middle" font-size="11" font-weight="500" fill="#0C447C" font-family="var(--font-sans)">shodan_search()</text>
+  <text x="523" y="469" text-anchor="middle" font-size="9.5" fill="#378ADD" font-family="var(--font-sans)">API · servicios, banners</text>
+  <text x="523" y="481" text-anchor="middle" font-size="9" fill="#185FA5" font-family="var(--font-sans)">T1596.005</text>
+</g>
+
+<!-- connectors agent → tools -->
+<line x1="280" y1="418" x2="195" y2="438" stroke="#378ADD" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="310" y1="418" x2="259" y2="438" stroke="#378ADD" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="370" y1="418" x2="391" y2="438" stroke="#378ADD" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="400" y1="418" x2="523" y2="438" stroke="#378ADD" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<!-- orden de ejecucion -->
+<text x="340" y="430" text-anchor="middle" font-size="10" fill="var(--color-text-secondary)" font-family="var(--font-sans)">① DNS  ②  Whois  ③ Harvester  ④ Shodan (si disponible)</text>
+
+<!-- summarization -->
+<rect x="200" y="506" width="280" height="30" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+<text x="340" y="518" text-anchor="middle" font-size="10" font-weight="500" fill="#412402" font-family="var(--font-sans)">Summarization automática</text>
+<text x="340" y="530" text-anchor="middle" font-size="10" fill="#854F0B" font-family="var(--font-sans)">output &gt; 2000 tokens → LLM auxiliar resume antes de insertar</text>
+
+<line x1="340" y1="488" x2="340" y2="506" stroke="#BA7517" stroke-width="0.5" marker-end="url(#arr-o)"/>
+
+<!-- consolidacion -->
+<g class="node" id="surface" data-tip="consolidate_recon_findings(): agrupa por target+tipo, deduplica por hash de evidencia, genera attack_surface_map en MongoDB. Campos: hosts[], domains[], emails[], open_ports_hint[], sources[]">
+  <rect x="180" y="552" width="320" height="40" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="340" y="568" text-anchor="middle" font-size="11" font-weight="500" fill="#042C53" font-family="var(--font-sans)">Consolidación → attack_surface_map</text>
+  <text x="340" y="582" text-anchor="middle" font-size="10" fill="#185FA5" font-family="var(--font-sans)">MongoDB · hosts[], domains[], emails[], open_ports_hint[]</text>
+</g>
+
+<line x1="340" y1="536" x2="340" y2="552" stroke="#185FA5" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<!-- almacenamiento recon -->
+<rect x="520" y="556" width="128" height="32" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+<text x="584" y="570" text-anchor="middle" font-size="10" font-weight="500" fill="#26215C" font-family="var(--font-sans)">MongoDB</text>
+<text x="584" y="582" text-anchor="middle" font-size="9.5" fill="#534AB7" font-family="var(--font-sans)">colección findings</text>
+<line x1="500" y1="572" x2="520" y2="572" stroke="#534AB7" stroke-width="0.5" stroke-dasharray="3 2" marker-end="url(#arrow)"/>
+
+<!-- handoff a scan -->
+<line x1="340" y1="592" x2="340" y2="618" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="240" y="598" width="200" height="20" rx="4" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text x="340" y="612" text-anchor="middle" font-size="10" fill="#27500A" font-family="var(--font-sans)">GET /engagements/{id}/surface-map → ScanAgent</text>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FASE 3 — SCANAGENT
+══════════════════════════════════════════════════════════════ -->
+<rect x="20" y="628" width="88" height="22" rx="4" fill="#FAEEDA"/>
+<text x="64" y="643" text-anchor="middle" font-size="11" font-weight="500" fill="#633806" font-family="var(--font-sans)">FASE 3</text>
+<text x="64" y="657" text-anchor="middle" font-size="10" fill="#854F0B" font-family="var(--font-sans)">ScanAgent</text>
+
+<g class="node" id="scan" data-tip="Agente de escaneo activo. Recibe el surface_map de ReconAgent y ejecuta herramientas contra los hosts identificados. El LLM decide qué tool usar según el tipo de target (host vs URL). Aplica scope enforcement en cada call.">
+  <rect x="160" y="628" width="360" height="54" rx="10" fill="#FAEEDA" stroke="#854F0B" stroke-width="1.5"/>
+  <text x="340" y="650" text-anchor="middle" font-size="14" font-weight="500" fill="#412402" font-family="var(--font-sans)">ScanAgent</text>
+  <text x="340" y="666" text-anchor="middle" font-size="11" fill="#854F0B" font-family="var(--font-sans)">AgentLoop · LLM reasoning · MCP tools</text>
+  <text x="340" y="678" text-anchor="middle" font-size="10" fill="#BA7517" font-family="var(--font-sans)">TA0007 Discovery · TA0001 Initial Access · T1046 · T1190</text>
+</g>
+
+<!-- tools scan — 3 principales -->
+<!-- nmap -->
+<g class="node" id="t-nmap" data-tip="nmap_scan(): ejecuta Nmap con -sV -sC, output -oX (XML). Parsea con python-nmap. Timeout 120s. Retorna lista de puertos/servicios/versiones. MCP server. Normaliza via normalize_nmap_output().">
+  <rect x="90" y="704" width="148" height="64" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="164" y="720" text-anchor="middle" font-size="11" font-weight="500" fill="#412402" font-family="var(--font-sans)">nmap_scan()</text>
+  <text x="164" y="734" text-anchor="middle" font-size="9.5" fill="#854F0B" font-family="var(--font-sans)">-sV -sC · output XML</text>
+  <text x="164" y="746" text-anchor="middle" font-size="9.5" fill="#854F0B" font-family="var(--font-sans)">python-nmap · timeout 120s</text>
+  <text x="164" y="760" text-anchor="middle" font-size="9" fill="#BA7517" font-family="var(--font-sans)">T1046 · T1592</text>
+</g>
+<!-- nuclei -->
+<g class="node" id="t-nuclei" data-tip="nuclei_run(): ejecuta Nuclei con -j (JSON output). Filtra por severity. 500+ templates de CVEs. Timeout 180s. Retorna findings con template_id, severity, matched_at, evidence. Normaliza via normalize_nuclei_output().">
+  <rect x="266" y="704" width="148" height="64" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="340" y="720" text-anchor="middle" font-size="11" font-weight="500" fill="#412402" font-family="var(--font-sans)">nuclei_run()</text>
+  <text x="340" y="734" text-anchor="middle" font-size="9.5" fill="#854F0B" font-family="var(--font-sans)">templates CVEs · -j JSON</text>
+  <text x="340" y="746" text-anchor="middle" font-size="9.5" fill="#854F0B" font-family="var(--font-sans)">severity filter · timeout 180s</text>
+  <text x="340" y="760" text-anchor="middle" font-size="9" fill="#BA7517" font-family="var(--font-sans)">T1190 · T1059</text>
+</g>
+<!-- nikto -->
+<g class="node" id="t-nikto" data-tip="nikto_scan(): ejecuta Nikto con -Format json. Detecta: versiones web obsoletas, headers faltantes, archivos expuestos. Timeout 120s. Normaliza via normalize_nikto_output(). Solo para targets HTTP/HTTPS.">
+  <rect x="442" y="704" width="148" height="64" rx="6" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+  <text x="516" y="720" text-anchor="middle" font-size="11" font-weight="500" fill="#412402" font-family="var(--font-sans)">nikto_scan()</text>
+  <text x="516" y="734" text-anchor="middle" font-size="9.5" fill="#854F0B" font-family="var(--font-sans)">-Format json · HTTP/S</text>
+  <text x="516" y="746" text-anchor="middle" font-size="9.5" fill="#854F0B" font-family="var(--font-sans)">headers, versiones, archivos</text>
+  <text x="516" y="760" text-anchor="middle" font-size="9" fill="#BA7517" font-family="var(--font-sans)">T1190 · T1592</text>
+</g>
+
+<!-- connectors scan → tools -->
+<line x1="280" y1="682" x2="200" y2="704" stroke="#BA7517" stroke-width="0.5" marker-end="url(#arr-o)"/>
+<line x1="340" y1="682" x2="340" y2="704" stroke="#BA7517" stroke-width="0.5" marker-end="url(#arr-o)"/>
+<line x1="400" y1="682" x2="480" y2="704" stroke="#BA7517" stroke-width="0.5" marker-end="url(#arr-o)"/>
+
+<text x="340" y="697" text-anchor="middle" font-size="10" fill="var(--color-text-secondary)" font-family="var(--font-sans)">① Nmap (todos los hosts)  ② Nuclei  ③ Nikto (URLs detectadas)</text>
+
+<!-- normalización -->
+<g class="node" id="norm" data-tip="NormalizedFinding: Pydantic model con campos fijos: target, title, description, evidence_raw, source_tool, finding_type, phase, engagement_id. Schema extensible para ATT&CK y CVSS.">
+  <rect x="190" y="782" width="300" height="34" rx="6" fill="#F1EFE8" stroke="#888780" stroke-width="0.5"/>
+  <text x="340" y="797" text-anchor="middle" font-size="11" font-weight="500" fill="#2C2C2A" font-family="var(--font-sans)">Normalización → NormalizedFinding</text>
+  <text x="340" y="810" text-anchor="middle" font-size="10" fill="#5F5E5A" font-family="var(--font-sans)">normalize_nmap/nuclei/nikto_output() · Pydantic model</text>
+</g>
+<line x1="340" y1="768" x2="340" y2="782" stroke="#888780" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<!-- chunking -->
+<rect x="200" y="830" width="280" height="28" rx="5" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+<text x="340" y="843" text-anchor="middle" font-size="10" font-weight="500" fill="#412402" font-family="var(--font-sans)">Chunking de outputs grandes</text>
+<text x="340" y="855" text-anchor="middle" font-size="9.5" fill="#854F0B" font-family="var(--font-sans)">&gt; MAX_CONTEXT_TOKENS (3000) → LLM auxiliar resume</text>
+<line x1="340" y1="816" x2="340" y2="830" stroke="#BA7517" stroke-width="0.5" marker-end="url(#arr-o)"/>
+
+<!-- persistencia scan -->
+<g class="node" id="db-scan" data-tip="FindingRepository.save(): persiste en MongoDB colección findings. Índices en engagement_id, severity, att_technique. Emite evento WebSocket finding.created al dashboard.">
+  <rect x="180" y="872" width="320" height="38" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="340" y="888" text-anchor="middle" font-size="11" font-weight="500" fill="#26215C" font-family="var(--font-sans)">MongoDB · colección findings</text>
+  <text x="340" y="902" text-anchor="middle" font-size="10" fill="#534AB7" font-family="var(--font-sans)">FindingRepository.save() · WS evento finding.created</text>
+</g>
+<line x1="340" y1="858" x2="340" y2="872" stroke="#534AB7" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<!-- ws emit -->
+<rect x="512" y="876" width="136" height="30" rx="5" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text x="580" y="889" text-anchor="middle" font-size="9.5" font-weight="500" fill="#27500A" font-family="var(--font-sans)">WebSocket event</text>
+<text x="580" y="901" text-anchor="middle" font-size="9" fill="#3B6D11" font-family="var(--font-sans)">finding.created → dashboard</text>
+<line x1="500" y1="891" x2="512" y2="891" stroke="#639922" stroke-width="0.5" stroke-dasharray="3 2" marker-end="url(#arrow)"/>
+
+<!-- handoff a analysis -->
+<line x1="340" y1="910" x2="340" y2="936" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="220" y="916" width="240" height="20" rx="4" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text x="340" y="930" text-anchor="middle" font-size="10" fill="#27500A" font-family="var(--font-sans)">FindingRepository.find_by_engagement() → AnalysisAgent</text>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FASE 4 — ANALYSISAGENT
+══════════════════════════════════════════════════════════════ -->
+<rect x="20" y="946" width="88" height="22" rx="4" fill="#E1F5EE"/>
+<text x="64" y="961" text-anchor="middle" font-size="11" font-weight="500" fill="#085041" font-family="var(--font-sans)">FASE 4</text>
+<text x="64" y="975" text-anchor="middle" font-size="10" fill="#0F6E56" font-family="var(--font-sans)">AnalysisAgent</text>
+
+<g class="node" id="analysis" data-tip="El agente con mayor carga de razonamiento LLM. No ejecuta herramientas externas — consulta la BD de findings y razona sobre ellos para identificar vectores de ataque, mapear a ATT&CK y asignar CVSS.">
+  <rect x="160" y="946" width="360" height="54" rx="10" fill="#E1F5EE" stroke="#0F6E56" stroke-width="1.5"/>
+  <text x="340" y="968" text-anchor="middle" font-size="14" font-weight="500" fill="#04342C" font-family="var(--font-sans)">AnalysisAgent</text>
+  <text x="340" y="984" text-anchor="middle" font-size="11" fill="#0F6E56" font-family="var(--font-sans)">LLM reasoning intensivo · sin tools externas</text>
+  <text x="340" y="996" text-anchor="middle" font-size="10" fill="#1D9E75" font-family="var(--font-sans)">Claude 3.5 Sonnet · context 200k tokens</text>
+</g>
+
+<!-- tools analysis — query + att + cvss -->
+<g class="node" id="t-query" data-tip="query_findings(): consulta MongoDB con filtros. El AnalysisAgent puede filtrar por phase, severity, technique. Si hay >20 findings, se dividen en chunks de 20 y se analiza cada grupo.">
+  <rect x="90" y="1022" width="148" height="52" rx="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="164" y="1038" text-anchor="middle" font-size="11" font-weight="500" fill="#04342C" font-family="var(--font-sans)">query_findings()</text>
+  <text x="164" y="1052" text-anchor="middle" font-size="9.5" fill="#0F6E56" font-family="var(--font-sans)">chunks de 20 findings</text>
+  <text x="164" y="1064" text-anchor="middle" font-size="9" fill="#1D9E75" font-family="var(--font-sans)">MongoDB → LLM context</text>
+</g>
+<g class="node" id="t-att" data-tip="lookup_att_technique(): busca en la ATT&CK Enterprise Matrix local (JSON descargado de attack.mitre.org). Retorna ID, nombre, descripción, mitigaciones y URL. Luego enrich_finding_with_att() actualiza el documento MongoDB.">
+  <rect x="266" y="1022" width="148" height="52" rx="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="340" y="1038" text-anchor="middle" font-size="11" font-weight="500" fill="#04342C" font-family="var(--font-sans)">lookup_att_technique()</text>
+  <text x="340" y="1052" text-anchor="middle" font-size="9.5" fill="#0F6E56" font-family="var(--font-sans)">ATT&CK JSON local</text>
+  <text x="340" y="1064" text-anchor="middle" font-size="9" fill="#1D9E75" font-family="var(--font-sans)">T1190, T1046, T1078…</text>
+</g>
+<g class="node" id="t-cve" data-tip="cve_lookup(): consulta NVD API para obtener descripción, CVSS base score v3.1 y referencias. Rate limiting incluido. Si no hay CVE, el LLM estima el score con justificación.">
+  <rect x="442" y="1022" width="148" height="52" rx="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="516" y="1038" text-anchor="middle" font-size="11" font-weight="500" fill="#04342C" font-family="var(--font-sans)">cve_lookup()</text>
+  <text x="516" y="1052" text-anchor="middle" font-size="9.5" fill="#0F6E56" font-family="var(--font-sans)">NVD API · CVSS v3.1</text>
+  <text x="516" y="1064" text-anchor="middle" font-size="9" fill="#1D9E75" font-family="var(--font-sans)">score → classify_severity()</text>
+</g>
+
+<line x1="280" y1="1000" x2="200" y2="1022" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="340" y1="1000" x2="340" y2="1022" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="400" y1="1000" x2="480" y2="1022" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#arrow)"/>
+<text x="340" y="1014" text-anchor="middle" font-size="10" fill="var(--color-text-secondary)" font-family="var(--font-sans)">① Query findings  ② Mapear ATT&CK  ③ Lookup CVE / estimar CVSS</text>
+
+<!-- enrichment -->
+<g class="node" id="enrich" data-tip="enrich_finding_with_att(): actualiza el documento MongoDB del finding con att_tactic, att_technique, att_technique_url, cvss_score, severity. classify_severity() categoriza: Critical≥9.0, High 7-8.9, Medium 4-6.9, Low <4.">
+  <rect x="170" y="1090" width="340" height="38" rx="6" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+  <text x="340" y="1106" text-anchor="middle" font-size="11" font-weight="500" fill="#04342C" font-family="var(--font-sans)">Enriquecimiento de findings</text>
+  <text x="340" y="1120" text-anchor="middle" font-size="10" fill="#0F6E56" font-family="var(--font-sans)">att_tactic · att_technique · cvss_score · severity</text>
+</g>
+<line x1="340" y1="1074" x2="340" y2="1090" stroke="#1D9E75" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<!-- vectores -->
+<g class="node" id="vectors" data-tip="attack_vectors: MongoDB collection. Campos: engagement_id, title, description, supporting_findings[], att_tactic, att_technique, severity. El AnalysisAgent consolida vectores si hay >1 chunk de findings.">
+  <rect x="180" y="1142" width="320" height="38" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="340" y="1158" text-anchor="middle" font-size="11" font-weight="500" fill="#26215C" font-family="var(--font-sans)">MongoDB · attack_vectors + findings enriquecidos</text>
+  <text x="340" y="1172" text-anchor="middle" font-size="10" fill="#534AB7" font-family="var(--font-sans)">GET /engagements/{id}/vectors · /att-coverage</text>
+</g>
+<line x1="340" y1="1128" x2="340" y2="1142" stroke="#534AB7" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<!-- cobertura ATT&CK -->
+<rect x="520" y="1148" width="128" height="26" rx="5" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text x="584" y="1160" text-anchor="middle" font-size="9.5" font-weight="500" fill="#27500A" font-family="var(--font-sans)">/att-coverage</text>
+<text x="584" y="1170" text-anchor="middle" font-size="9" fill="#3B6D11" font-family="var(--font-sans)">% cobertura por táctica</text>
+<line x1="500" y1="1161" x2="520" y2="1161" stroke="#639922" stroke-width="0.5" stroke-dasharray="3 2" marker-end="url(#arrow)"/>
+
+<!-- handoff a reporter -->
+<line x1="340" y1="1180" x2="340" y2="1206" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+<rect x="220" y="1186" width="240" height="20" rx="4" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text x="340" y="1200" text-anchor="middle" font-size="10" fill="#27500A" font-family="var(--font-sans)">query_findings + query_vectors → ReporterAgent</text>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FASE 5 — REPORTERAGENT
+══════════════════════════════════════════════════════════════ -->
+<rect x="20" y="1216" width="88" height="22" rx="4" fill="#FCEBEB"/>
+<text x="64" y="1231" text-anchor="middle" font-size="11" font-weight="500" fill="#501313" font-family="var(--font-sans)">FASE 5</text>
+<text x="64" y="1245" text-anchor="middle" font-size="10" fill="#A32D2D" font-family="var(--font-sans)">Reporter</text>
+
+<g class="node" id="reporter" data-tip="ReporterAgent genera el contenido textual de cada sección del reporte usando el LLM (descripciones de riesgo, recomendaciones). Luego render_pdf() aplica Jinja2 + WeasyPrint para producir el PDF final.">
+  <rect x="160" y="1216" width="360" height="54" rx="10" fill="#FCEBEB" stroke="#A32D2D" stroke-width="1.5"/>
+  <text x="340" y="1238" text-anchor="middle" font-size="14" font-weight="500" fill="#501313" font-family="var(--font-sans)">ReporterAgent</text>
+  <text x="340" y="1254" text-anchor="middle" font-size="11" fill="#A32D2D" font-family="var(--font-sans)">Jinja2 templates · WeasyPrint PDF</text>
+  <text x="340" y="1266" text-anchor="middle" font-size="10" fill="#E24B4A" font-family="var(--font-sans)">reporte técnico + ejecutivo · render_pdf()</text>
+</g>
+
+<!-- dos reportes -->
+<g class="node" id="rpt-tech" data-tip="Reporte técnico: portada, resumen, índice, sección por finding (evidencia raw + técnica ATT&CK + CVSS breakdown + recomendación de mitigación), sección HITL, anexos. POST /engagements/{id}/reports/technical">
+  <rect x="110" y="1292" width="220" height="68" rx="8" fill="#FCEBEB" stroke="#E24B4A" stroke-width="0.5"/>
+  <text x="220" y="1310" text-anchor="middle" font-size="11" font-weight="500" fill="#501313" font-family="var(--font-sans)">Reporte técnico</text>
+  <text x="220" y="1326" text-anchor="middle" font-size="9.5" fill="#A32D2D" font-family="var(--font-sans)">hallazgos · evidencia raw</text>
+  <text x="220" y="1340" text-anchor="middle" font-size="9.5" fill="#A32D2D" font-family="var(--font-sans)">ATT&CK · CVSS · mitigación</text>
+  <text x="220" y="1352" text-anchor="middle" font-size="9" fill="#E24B4A" font-family="var(--font-sans)">historial HITL · anexos</text>
+</g>
+<g class="node" id="rpt-exec" data-tip="Reporte ejecutivo: máx. 3 páginas. Resumen en lenguaje de negocio (sin jerga técnica), top 3 riesgos críticos, vectores identificados, recomendaciones priorizadas. POST /engagements/{id}/reports/executive">
+  <rect x="350" y="1292" width="220" height="68" rx="8" fill="#FCEBEB" stroke="#E24B4A" stroke-width="0.5"/>
+  <text x="460" y="1310" text-anchor="middle" font-size="11" font-weight="500" fill="#501313" font-family="var(--font-sans)">Reporte ejecutivo</text>
+  <text x="460" y="1326" text-anchor="middle" font-size="9.5" fill="#A32D2D" font-family="var(--font-sans)">máx. 3 páginas · no jerga</text>
+  <text x="460" y="1340" text-anchor="middle" font-size="9.5" fill="#A32D2D" font-family="var(--font-sans)">top 3 riesgos · impacto negocio</text>
+  <text x="460" y="1352" text-anchor="middle" font-size="9" fill="#E24B4A" font-family="var(--font-sans)">recomendaciones priorizadas</text>
+</g>
+
+<line x1="300" y1="1270" x2="240" y2="1292" stroke="#E24B4A" stroke-width="0.5" marker-end="url(#arr-r)"/>
+<line x1="380" y1="1270" x2="440" y2="1292" stroke="#E24B4A" stroke-width="0.5" marker-end="url(#arr-r)"/>
+
+<!-- PDF + storage -->
+<rect x="200" y="1374" width="280" height="30" rx="6" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+<text x="340" y="1388" text-anchor="middle" font-size="11" font-weight="500" fill="#26215C" font-family="var(--font-sans)">render_pdf() → Cloud Storage / filesystem</text>
+<text x="340" y="1400" text-anchor="middle" font-size="10" fill="#534AB7" font-family="var(--font-sans)">MongoDB colección reports · GET /reports/{id}/download</text>
+<line x1="220" y1="1360" x2="280" y2="1374" stroke="#534AB7" stroke-width="0.5" marker-end="url(#arrow)"/>
+<line x1="460" y1="1360" x2="400" y2="1374" stroke="#534AB7" stroke-width="0.5" marker-end="url(#arrow)"/>
+
+<!-- ══════════════════════════════════════════════════════════════
+     FASE 6 — DASHBOARD / OUTPUT
+══════════════════════════════════════════════════════════════ -->
+<rect x="20" y="1424" width="88" height="22" rx="4" fill="#EAF3DE"/>
+<text x="64" y="1439" text-anchor="middle" font-size="11" font-weight="500" fill="#27500A" font-family="var(--font-sans)">FASE 6</text>
+<text x="64" y="1453" text-anchor="middle" font-size="10" fill="#3B6D11" font-family="var(--font-sans)">Dashboard</text>
+
+<line x1="340" y1="1404" x2="340" y2="1430" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- dashboard boxes -->
+<g class="node" id="dash-find" data-tip="FindingsTable: tabla con columnas severidad, título, target, técnica ATT&CK, CVSS, agente. Filtros por severidad, táctica, búsqueda libre. Nuevos findings via useWebSocket hook → React state sin recargar.">
+  <rect x="68" y="1434" width="130" height="52" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="133" y="1452" text-anchor="middle" font-size="10" font-weight="500" fill="#173404" font-family="var(--font-sans)">Findings table</text>
+  <text x="133" y="1466" text-anchor="middle" font-size="9" fill="#3B6D11" font-family="var(--font-sans)">filtros · ATT&CK badge</text>
+  <text x="133" y="1478" text-anchor="middle" font-size="9" fill="#639922" font-family="var(--font-sans)">WebSocket RT</text>
+</g>
+<g class="node" id="dash-pipe" data-tip="PipelineProgress: 4 fases con estado (pending/running/completed/failed). AgentLog en tiempo real: timestamp, agente con color, mensaje. Eventos: phase.started, phase.completed, agent.log via WebSocket.">
+  <rect x="212" y="1434" width="130" height="52" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="277" y="1452" text-anchor="middle" font-size="10" font-weight="500" fill="#173404" font-family="var(--font-sans)">Pipeline status</text>
+  <text x="277" y="1466" text-anchor="middle" font-size="9" fill="#3B6D11" font-family="var(--font-sans)">progreso por fase</text>
+  <text x="277" y="1478" text-anchor="middle" font-size="9" fill="#639922" font-family="var(--font-sans)">agent log RT</text>
+</g>
+<g class="node" id="dash-hitl" data-tip="HITL console: muestra acciones pendientes de aprobación con detail de la acción, risk_level, payload exacto. Botones Aprobar/Rechazar → POST /hitl/{id}/decision → desbloquea asyncio.Event del agente.">
+  <rect x="356" y="1434" width="130" height="52" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="421" y="1452" text-anchor="middle" font-size="10" font-weight="500" fill="#173404" font-family="var(--font-sans)">HITL console</text>
+  <text x="421" y="1466" text-anchor="middle" font-size="9" fill="#3B6D11" font-family="var(--font-sans)">aprobación en vivo</text>
+  <text x="421" y="1478" text-anchor="middle" font-size="9" fill="#639922" font-family="var(--font-sans)">asyncio.Event unlock</text>
+</g>
+<g class="node" id="dash-rpt" data-tip="ReportsList: lista reportes por tipo (técnico/ejecutivo), fecha, tamaño. GET /engagements/{id}/reports. Descarga via GET /reports/{id}/download con Content-Disposition.">
+  <rect x="500" y="1434" width="130" height="52" rx="6" fill="#EAF3DE" stroke="#3B6D11" stroke-width="0.5"/>
+  <text x="565" y="1452" text-anchor="middle" font-size="10" font-weight="500" fill="#173404" font-family="var(--font-sans)">Reports access</text>
+  <text x="565" y="1466" text-anchor="middle" font-size="9" fill="#3B6D11" font-family="var(--font-sans)">PDF descargable</text>
+  <text x="565" y="1478" text-anchor="middle" font-size="9" fill="#639922" font-family="var(--font-sans)">historial completo</text>
+</g>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CAPA DE DATOS — resumen lateral
+══════════════════════════════════════════════════════════════ -->
+<rect x="20" y="1516" width="88" height="22" rx="4" fill="#EEEDFE"/>
+<text x="64" y="1531" text-anchor="middle" font-size="11" font-weight="500" fill="#3C3489" font-family="var(--font-sans)">DATOS</text>
+<text x="64" y="1545" text-anchor="middle" font-size="10" fill="#534AB7" font-family="var(--font-sans)">Persistencia</text>
+
+<line x1="340" y1="1486" x2="340" y2="1524" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+
+<!-- PG schema -->
+<g class="node" id="pg-schema" data-tip="PostgreSQL schemas: engagements (UUID, name, roe JSONB, status ENUM, timestamps), scope_targets (target_value, target_type), hitl_actions (payload JSONB, risk_level, status, reviewed_at), engagement_events (audit trail).">
+  <rect x="68" y="1524" width="266" height="70" rx="8" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+  <text x="201" y="1542" text-anchor="middle" font-size="11" font-weight="500" fill="#042C53" font-family="var(--font-sans)">PostgreSQL — datos estructurados</text>
+  <text x="201" y="1557" text-anchor="middle" font-size="9.5" fill="#185FA5" font-family="var(--font-sans)">engagements · scope_targets</text>
+  <text x="201" y="1570" text-anchor="middle" font-size="9.5" fill="#185FA5" font-family="var(--font-sans)">hitl_actions · engagement_events</text>
+  <text x="201" y="1583" text-anchor="middle" font-size="9" fill="#378ADD" font-family="var(--font-sans)">audit trail inmutable</text>
+</g>
+
+<!-- Mongo schema -->
+<g class="node" id="mongo-schema" data-tip="MongoDB collections: findings (NormalizedFinding + ATT&CK + CVSS, índices en engagement_id/severity/att_technique), attack_vectors, attack_surface_map, agent_runs (full context window + tool_calls), scope_violations, reports.">
+  <rect x="346" y="1524" width="266" height="70" rx="8" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+  <text x="479" y="1542" text-anchor="middle" font-size="11" font-weight="500" fill="#26215C" font-family="var(--font-sans)">MongoDB — documentos flexibles</text>
+  <text x="479" y="1557" text-anchor="middle" font-size="9.5" fill="#534AB7" font-family="var(--font-sans)">findings · attack_vectors · agent_runs</text>
+  <text x="479" y="1570" text-anchor="middle" font-size="9.5" fill="#534AB7" font-family="var(--font-sans)">attack_surface_map · reports</text>
+  <text x="479" y="1583" text-anchor="middle" font-size="9" fill="#7F77DD" font-family="var(--font-sans)">scope_violations · índices optimizados</text>
+</g>
+
+<!-- ══════════════════════════════════════════════════════════════
+     CAPA MCP — protocolo
+══════════════════════════════════════════════════════════════ -->
+<rect x="20" y="1618" width="88" height="22" rx="4" fill="#FAEEDA"/>
+<text x="64" y="1633" text-anchor="middle" font-size="11" font-weight="500" fill="#633806" font-family="var(--font-sans)">PROTOCOLO</text>
+<text x="64" y="1647" text-anchor="middle" font-size="10" fill="#854F0B" font-family="var(--font-sans)">MCP</text>
+
+<line x1="340" y1="1594" x2="340" y2="1622" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+
+<g class="node" id="mcp-layer" data-tip="Model Context Protocol: cada tool se expone como MCP server con JSON schema de parámetros y retorno. Agentes invocan vía tool_use JSON. MCP server ejecuta subprocess + valida scope + retorna JSON normalizado. Desacopla agentes de herramientas.">
+  <rect x="68" y="1622" width="544" height="52" rx="8" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+  <text x="340" y="1642" text-anchor="middle" font-size="11" font-weight="500" fill="#412402" font-family="var(--font-sans)">MCP Servers — capa de herramientas estandarizada</text>
+  <text x="340" y="1656" text-anchor="middle" font-size="9.5" fill="#854F0B" font-family="var(--font-sans)">dns_enum · whois · theHarvester · shodan · nmap · nuclei · nikto · lookup_att · cve_lookup · query_findings</text>
+  <text x="340" y="1668" text-anchor="middle" font-size="9" fill="#BA7517" font-family="var(--font-sans)">@enforce_scope en cada tool · subprocess con timeout · JSON normalizado</text>
+</g>
+
+<!-- ══════════════════════════════════════════════════════════════
+     LAB TARGETS
+══════════════════════════════════════════════════════════════ -->
+<line x1="340" y1="1674" x2="340" y2="1700" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+
+<rect x="20" y="1710" width="88" height="22" rx="4" fill="#FCEBEB"/>
+<text x="64" y="1725" text-anchor="middle" font-size="11" font-weight="500" fill="#501313" font-family="var(--font-sans)">LAB</text>
+<text x="64" y="1739" text-anchor="middle" font-size="10" fill="#A32D2D" font-family="var(--font-sans)">Targets</text>
+
+<g class="node" id="lab" data-tip="Red de laboratorio aislada sin acceso a internet. Tool Runner VM ejecuta las herramientas con acceso a los targets via VPC interna. Ground truth documentado para validación de cobertura.">
+  <rect x="68" y="1700" width="544" height="48" rx="8" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+  <text x="340" y="1720" text-anchor="middle" font-size="11" font-weight="500" fill="#501313" font-family="var(--font-sans)">Entorno de laboratorio controlado — red aislada</text>
+  <text x="260" y="1738" text-anchor="middle" font-size="9.5" fill="#A32D2D" font-family="var(--font-sans)">Metasploitable2 · vsftpd, Samba, MySQL sin auth…</text>
+  <text x="490" y="1738" text-anchor="middle" font-size="9.5" fill="#A32D2D" font-family="var(--font-sans)">DVWA · SQLi, XSS, LFI, CSRF…</text>
+</g>
+
+<!-- ══════════════════════════════════════════════════════════════
+     MÉTRICAS
+══════════════════════════════════════════════════════════════ -->
+<line x1="340" y1="1748" x2="340" y2="1774" stroke="var(--color-border-secondary)" stroke-width="1" marker-end="url(#arrow)"/>
+
+<rect x="20" y="1784" width="88" height="22" rx="4" fill="#E1F5EE"/>
+<text x="64" y="1799" text-anchor="middle" font-size="11" font-weight="500" fill="#085041" font-family="var(--font-sans)">MÉTRICAS</text>
+<text x="64" y="1813" text-anchor="middle" font-size="10" fill="#0F6E56" font-family="var(--font-sans)">Validación</text>
+
+<g class="node" id="m1" data-tip="Cobertura: findings detectados / vulnerabilidades conocidas del ground truth. Meta ≥70%.">
+  <rect x="68" y="1778" width="166" height="52" rx="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="151" y="1796" text-anchor="middle" font-size="10" font-weight="500" fill="#04342C" font-family="var(--font-sans)">Cobertura vulns</text>
+  <text x="151" y="1810" text-anchor="middle" font-size="9" fill="#0F6E56" font-family="var(--font-sans)">detected / ground truth</text>
+  <text x="151" y="1822" text-anchor="middle" font-size="10" font-weight="500" fill="#1D9E75" font-family="var(--font-sans)">meta ≥ 70%</text>
+</g>
+<g class="node" id="m2" data-tip="Precisión ATT&CK: mapeos correctos / total mapeos, validado contra clasificación manual experta. Meta ≥80%.">
+  <rect x="248" y="1778" width="184" height="52" rx="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="340" y="1796" text-anchor="middle" font-size="10" font-weight="500" fill="#04342C" font-family="var(--font-sans)">Precisión ATT&CK</text>
+  <text x="340" y="1810" text-anchor="middle" font-size="9" fill="#0F6E56" font-family="var(--font-sans)">mapeos correctos / total</text>
+  <text x="340" y="1822" text-anchor="middle" font-size="10" font-weight="500" fill="#1D9E75" font-family="var(--font-sans)">meta ≥ 80%</text>
+</g>
+<g class="node" id="m3" data-tip="Calidad del reporte: rúbrica de 5 criterios (completitud, claridad, accionabilidad, comparación vs reporte manual). Meta ≥60%.">
+  <rect x="446" y="1778" width="166" height="52" rx="6" fill="#E1F5EE" stroke="#1D9E75" stroke-width="0.5"/>
+  <text x="529" y="1796" text-anchor="middle" font-size="10" font-weight="500" fill="#04342C" font-family="var(--font-sans)">Calidad reporte</text>
+  <text x="529" y="1810" text-anchor="middle" font-size="9" fill="#0F6E56" font-family="var(--font-sans)">rúbrica 5 criterios</text>
+  <text x="529" y="1822" text-anchor="middle" font-size="10" font-weight="500" fill="#1D9E75" font-family="var(--font-sans)">meta ≥ 60%</text>
+</g>
+
+<!-- ══════════════════════════════════════════════════════════════
+     LEYENDA
+══════════════════════════════════════════════════════════════ -->
+<rect x="68" y="1854" width="544" height="64" rx="8" fill="none" stroke="var(--color-border-tertiary)" stroke-width="0.5" stroke-dasharray="5 3"/>
+<text x="340" y="1870" text-anchor="middle" font-size="10" font-weight="500" fill="var(--color-text-secondary)" font-family="var(--font-sans)">Leyenda</text>
+
+<!-- leyenda items -->
+<rect x="90" y="1882" width="36" height="14" rx="3" fill="#E6F1FB" stroke="#185FA5" stroke-width="0.5"/>
+<text x="134" y="1893" font-size="9.5" fill="var(--color-text-secondary)" font-family="var(--font-sans)">ReconAgent</text>
+
+<rect x="210" y="1882" width="36" height="14" rx="3" fill="#FAEEDA" stroke="#854F0B" stroke-width="0.5"/>
+<text x="254" y="1893" font-size="9.5" fill="var(--color-text-secondary)" font-family="var(--font-sans)">ScanAgent</text>
+
+<rect x="320" y="1882" width="36" height="14" rx="3" fill="#E1F5EE" stroke="#0F6E56" stroke-width="0.5"/>
+<text x="364" y="1893" font-size="9.5" fill="var(--color-text-secondary)" font-family="var(--font-sans)">AnalysisAgent</text>
+
+<rect x="454" y="1882" width="36" height="14" rx="3" fill="#FCEBEB" stroke="#A32D2D" stroke-width="0.5"/>
+<text x="498" y="1893" font-size="9.5" fill="var(--color-text-secondary)" font-family="var(--font-sans)">ReporterAgent</text>
+
+<rect x="90" y="1906" width="36" height="14" rx="3" fill="#EEEDFE" stroke="#534AB7" stroke-width="0.5"/>
+<text x="134" y="1917" font-size="9.5" fill="var(--color-text-secondary)" font-family="var(--font-sans)">MongoDB</text>
+
+<rect x="210" y="1906" width="36" height="14" rx="3" fill="#FAEEDA" stroke="#BA7517" stroke-width="0.5"/>
+<text x="254" y="1917" font-size="9.5" fill="var(--color-text-secondary)" font-family="var(--font-sans)">HITL / Decisión</text>
+
+<rect x="320" y="1906" width="36" height="14" rx="3" fill="#EAF3DE" stroke="#639922" stroke-width="0.5"/>
+<text x="364" y="1917" font-size="9.5" fill="var(--color-text-secondary)" font-family="var(--font-sans)">Handoff / Output</text>
+
+<rect x="454" y="1906" width="36" height="14" rx="3" fill="#FCEBEB" stroke="#E24B4A" stroke-width="0.5"/>
+<text x="498" y="1917" font-size="9.5" fill="var(--color-text-secondary)" font-family="var(--font-sans)">Bloqueado / Error</text>
+
+</svg>
+
+<div class="tip" id="tooltip"></div>
+</div>
+
+<script>
+const tabs = [
+  {id:'op',     label:'Operador'},
+  {id:'mc',     label:'MissionCtrl'},
+  {id:'hitl',   label:'HITL gate'},
+  {id:'recon',  label:'ReconAgent'},
+  {id:'scan',   label:'ScanAgent'},
+  {id:'analysis',label:'AnalysisAgent'},
+  {id:'reporter',label:'ReporterAgent'},
+  {id:'mcp-layer',label:'MCP'},
+  {id:'lab',    label:'Lab targets'},
+  {id:'m1',     label:'Métricas'},
+];
+
+const container = document.getElementById('tabs');
+const svg = document.getElementById('diag');
+const tip = document.getElementById('tooltip');
+
+tabs.forEach(t => {
+  const b = document.createElement('button');
+  b.className = 'ptab';
+  b.textContent = t.label;
+  b.onclick = () => {
+    document.querySelectorAll('.ptab').forEach(x=>x.classList.remove('on'));
+    b.classList.add('on');
+    const el = document.getElementById(t.id);
+    if(el) el.scrollIntoView({behavior:'smooth', block:'center'});
+  };
+  container.appendChild(b);
+});
+
+document.querySelectorAll('[data-tip]').forEach(el => {
+  el.style.cursor = 'pointer';
+  el.addEventListener('mouseenter', e => {
+    tip.style.display = 'block';
+    tip.innerHTML = '<b>' + (el.querySelector('text')?.textContent||'') + '</b><s2>' + el.dataset.tip + '</s2>';
+  });
+  el.addEventListener('mousemove', e => {
+    tip.style.left = (e.clientX + 12) + 'px';
+    tip.style.top  = (e.clientY - 8) + 'px';
+  });
+  el.addEventListener('mouseleave', () => { tip.style.display = 'none'; });
+});
+</script>
